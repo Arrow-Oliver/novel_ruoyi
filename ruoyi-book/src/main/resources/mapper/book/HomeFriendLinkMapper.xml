@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.book.mapper.HomeFriendLinkMapper">
+    
+    <resultMap type="HomeFriendLink" id="HomeFriendLinkResult">
+        <result property="id"    column="id"    />
+        <result property="linkName"    column="link_name"    />
+        <result property="linkUrl"    column="link_url"    />
+        <result property="sort"    column="sort"    />
+        <result property="isOpen"    column="is_open"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectHomeFriendLinkVo">
+        select id, link_name, link_url, sort, is_open, create_time, update_time from home_friend_link
+    </sql>
+
+    <select id="selectHomeFriendLinkList" parameterType="HomeFriendLink" resultMap="HomeFriendLinkResult">
+        <include refid="selectHomeFriendLinkVo"/>
+        <where>  
+            <if test="linkName != null  and linkName != ''"> and link_name like concat('%', #{linkName}, '%')</if>
+            <if test="linkUrl != null  and linkUrl != ''"> and link_url = #{linkUrl}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="isOpen != null "> and is_open = #{isOpen}</if>
+        </where>
+    </select>
+    
+    <select id="selectHomeFriendLinkById" parameterType="Long" resultMap="HomeFriendLinkResult">
+        <include refid="selectHomeFriendLinkVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertHomeFriendLink" parameterType="HomeFriendLink" useGeneratedKeys="true" keyProperty="id">
+        insert into home_friend_link
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="linkName != null and linkName != ''">link_name,</if>
+            <if test="linkUrl != null and linkUrl != ''">link_url,</if>
+            <if test="sort != null">sort,</if>
+            <if test="isOpen != null">is_open,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="linkName != null and linkName != ''">#{linkName},</if>
+            <if test="linkUrl != null and linkUrl != ''">#{linkUrl},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="isOpen != null">#{isOpen},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHomeFriendLink" parameterType="HomeFriendLink">
+        update home_friend_link
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="linkName != null and linkName != ''">link_name = #{linkName},</if>
+            <if test="linkUrl != null and linkUrl != ''">link_url = #{linkUrl},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="isOpen != null">is_open = #{isOpen},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHomeFriendLinkById" parameterType="Long">
+        delete from home_friend_link where id = #{id}
+    </delete>
+
+    <delete id="deleteHomeFriendLinkByIds" parameterType="String">
+        delete from home_friend_link where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

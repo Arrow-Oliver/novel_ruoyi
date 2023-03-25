@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.book.mapper.NewsCategoryMapper">
+    
+    <resultMap type="NewsCategory" id="NewsCategoryResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="sort"    column="sort"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectNewsCategoryVo">
+        select id, name, sort, create_time, update_time from news_category
+    </sql>
+
+    <select id="selectNewsCategoryList" parameterType="NewsCategory" resultMap="NewsCategoryResult">
+        <include refid="selectNewsCategoryVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewsCategoryById" parameterType="Long" resultMap="NewsCategoryResult">
+        <include refid="selectNewsCategoryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewsCategory" parameterType="NewsCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into news_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewsCategory" parameterType="NewsCategory">
+        update news_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewsCategoryById" parameterType="Long">
+        delete from news_category where id = #{id}
+    </delete>
+
+    <delete id="deleteNewsCategoryByIds" parameterType="String">
+        delete from news_category where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

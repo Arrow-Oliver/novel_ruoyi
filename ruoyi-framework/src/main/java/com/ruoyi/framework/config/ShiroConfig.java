@@ -234,7 +234,7 @@ public class ShiroConfig
     }
 
     /**
-     * 安全管理器
+     * 安全管理器（中枢）
      */
     @Bean
     public SecurityManager securityManager(UserRealm userRealm)
@@ -277,6 +277,7 @@ public class ShiroConfig
         // Shiro连接约束配置，即过滤链的定义
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 对静态资源设置匿名访问
+        // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
         filterChainDefinitionMap.put("/favicon.ico**", "anon");
         filterChainDefinitionMap.put("/ruoyi.png**", "anon");
         filterChainDefinitionMap.put("/html/**", "anon");

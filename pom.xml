@@ -199,6 +199,11 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-book</artifactId>
+                <version>4.7.4</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -209,6 +214,7 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>ruoyi-book</module>
     </modules>
     <packaging>pom</packaging>
 

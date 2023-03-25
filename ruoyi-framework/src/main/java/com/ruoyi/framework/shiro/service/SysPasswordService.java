@@ -42,7 +42,7 @@ public class SysPasswordService
     public void validate(SysUser user, String password)
     {
         String loginName = user.getLoginName();
-
+        //登录异常次数
         AtomicInteger retryCount = loginRecordCache.get(loginName);
 
         if (retryCount == null)
@@ -50,20 +50,23 @@ public class SysPasswordService
             retryCount = new AtomicInteger(0);
             loginRecordCache.put(loginName, retryCount);
         }
+        //超过最大登录异常禁止登录
         if (retryCount.incrementAndGet() > Integer.valueOf(maxRetryCount).intValue())
         {
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGIN_FAIL, MessageUtils.message("user.password.retry.limit.exceed", maxRetryCount)));
             throw new UserPasswordRetryLimitExceedException(Integer.valueOf(maxRetryCount).intValue());
         }
-
+        //用户名密码认证失败
         if (!matches(user, password))
         {
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGIN_FAIL, MessageUtils.message("user.password.retry.limit.count", retryCount)));
+            //错误数加一
             loginRecordCache.put(loginName, retryCount);
             throw new UserPasswordNotMatchException();
         }
         else
         {
+            //认证成功清除缓存
             clearLoginRecordCache(loginName);
         }
     }

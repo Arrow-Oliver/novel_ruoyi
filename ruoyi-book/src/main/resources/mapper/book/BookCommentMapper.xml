@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.book.mapper.BookCommentMapper">
+    
+    <resultMap type="BookComment" id="BookCommentResult">
+        <result property="id"    column="id"    />
+        <result property="bookId"    column="book_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="commentContent"    column="comment_content"    />
+        <result property="replyCount"    column="reply_count"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBookCommentVo">
+        select id, book_id, user_id, comment_content, reply_count, audit_status, create_time, update_time from book_comment
+    </sql>
+
+    <select id="selectBookCommentList" parameterType="BookComment" resultMap="BookCommentResult">
+        <include refid="selectBookCommentVo"/>
+        <where>  
+            <if test="bookId != null "> and book_id = #{bookId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="commentContent != null  and commentContent != ''"> and comment_content = #{commentContent}</if>
+            <if test="replyCount != null "> and reply_count = #{replyCount}</if>
+            <if test="auditStatus != null "> and audit_status = #{auditStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectBookCommentById" parameterType="Long" resultMap="BookCommentResult">
+        <include refid="selectBookCommentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBookComment" parameterType="BookComment" useGeneratedKeys="true" keyProperty="id">
+        insert into book_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bookId != null">book_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="commentContent != null and commentContent != ''">comment_content,</if>
+            <if test="replyCount != null">reply_count,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bookId != null">#{bookId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="commentContent != null and commentContent != ''">#{commentContent},</if>
+            <if test="replyCount != null">#{replyCount},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBookComment" parameterType="BookComment">
+        update book_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bookId != null">book_id = #{bookId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="commentContent != null and commentContent != ''">comment_content = #{commentContent},</if>
+            <if test="replyCount != null">reply_count = #{replyCount},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBookCommentById" parameterType="Long">
+        delete from book_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteBookCommentByIds" parameterType="String">
+        delete from book_comment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

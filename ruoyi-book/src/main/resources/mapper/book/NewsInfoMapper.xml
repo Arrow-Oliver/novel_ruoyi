@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.book.mapper.NewsInfoMapper">
+    
+    <resultMap type="NewsInfo" id="NewsInfoResult">
+        <result property="id"    column="id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="sourceName"    column="source_name"    />
+        <result property="title"    column="title"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectNewsInfoVo">
+        select id, category_id, category_name, source_name, title, create_time, update_time from news_info
+    </sql>
+
+    <select id="selectNewsInfoList" parameterType="NewsInfo" resultMap="NewsInfoResult">
+        <include refid="selectNewsInfoVo"/>
+        <where>  
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="sourceName != null  and sourceName != ''"> and source_name like concat('%', #{sourceName}, '%')</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewsInfoById" parameterType="Long" resultMap="NewsInfoResult">
+        <include refid="selectNewsInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewsInfo" parameterType="NewsInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into news_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">category_id,</if>
+            <if test="categoryName != null and categoryName != ''">category_name,</if>
+            <if test="sourceName != null and sourceName != ''">source_name,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="categoryName != null and categoryName != ''">#{categoryName},</if>
+            <if test="sourceName != null and sourceName != ''">#{sourceName},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewsInfo" parameterType="NewsInfo">
+        update news_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>
+            <if test="sourceName != null and sourceName != ''">source_name = #{sourceName},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewsInfoById" parameterType="Long">
+        delete from news_info where id = #{id}
+    </delete>
+
+    <delete id="deleteNewsInfoByIds" parameterType="String">
+        delete from news_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

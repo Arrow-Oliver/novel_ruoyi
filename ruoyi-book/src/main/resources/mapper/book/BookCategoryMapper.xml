@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.book.mapper.BookCategoryMapper">
+    
+    <resultMap type="BookCategory" id="BookCategoryResult">
+        <result property="id"    column="id"    />
+        <result property="workDirection"    column="work_direction"    />
+        <result property="name"    column="name"    />
+        <result property="sort"    column="sort"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBookCategoryVo">
+        select id, work_direction, name, sort, create_time, update_time from book_category
+    </sql>
+
+    <select id="selectBookCategoryList" parameterType="BookCategory" resultMap="BookCategoryResult">
+        <include refid="selectBookCategoryVo"/>
+        <where>  
+            <if test="workDirection != null "> and work_direction = #{workDirection}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+    </select>
+    
+    <select id="selectBookCategoryById" parameterType="Long" resultMap="BookCategoryResult">
+        <include refid="selectBookCategoryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBookCategory" parameterType="BookCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into book_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workDirection != null">work_direction,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workDirection != null">#{workDirection},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBookCategory" parameterType="BookCategory">
+        update book_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workDirection != null">work_direction = #{workDirection},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBookCategoryById" parameterType="Long">
+        delete from book_category where id = #{id}
+    </delete>
+
+    <delete id="deleteBookCategoryByIds" parameterType="String">
+        delete from book_category where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
