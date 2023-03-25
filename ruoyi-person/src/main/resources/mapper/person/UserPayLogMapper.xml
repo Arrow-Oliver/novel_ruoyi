@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.person.mapper.UserPayLogMapper">
+    
+    <resultMap type="UserPayLog" id="UserPayLogResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="payChannel"    column="pay_channel"    />
+        <result property="outTradeNo"    column="out_trade_no"    />
+        <result property="amount"    column="amount"    />
+        <result property="productType"    column="product_type"    />
+        <result property="productId"    column="product_id"    />
+        <result property="productName"    column="product_name"    />
+        <result property="productValue"    column="product_value"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUserPayLogVo">
+        select id, user_id, pay_channel, out_trade_no, amount, product_type, product_id, product_name, product_value, pay_time, create_time, update_time from user_pay_log
+    </sql>
+
+    <select id="selectUserPayLogList" parameterType="UserPayLog" resultMap="UserPayLogResult">
+        <include refid="selectUserPayLogVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="payChannel != null "> and pay_channel = #{payChannel}</if>
+            <if test="outTradeNo != null  and outTradeNo != ''"> and out_trade_no = #{outTradeNo}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="productType != null "> and product_type = #{productType}</if>
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="productValue != null "> and product_value = #{productValue}</if>
+            <if test="payTime != null "> and pay_time = #{payTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserPayLogById" parameterType="Long" resultMap="UserPayLogResult">
+        <include refid="selectUserPayLogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserPayLog" parameterType="UserPayLog" useGeneratedKeys="true" keyProperty="id">
+        insert into user_pay_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="payChannel != null">pay_channel,</if>
+            <if test="outTradeNo != null and outTradeNo != ''">out_trade_no,</if>
+            <if test="amount != null">amount,</if>
+            <if test="productType != null">product_type,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="productName != null and productName != ''">product_name,</if>
+            <if test="productValue != null">product_value,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="payChannel != null">#{payChannel},</if>
+            <if test="outTradeNo != null and outTradeNo != ''">#{outTradeNo},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="productType != null">#{productType},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="productName != null and productName != ''">#{productName},</if>
+            <if test="productValue != null">#{productValue},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserPayLog" parameterType="UserPayLog">
+        update user_pay_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="payChannel != null">pay_channel = #{payChannel},</if>
+            <if test="outTradeNo != null and outTradeNo != ''">out_trade_no = #{outTradeNo},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="productType != null">product_type = #{productType},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="productName != null and productName != ''">product_name = #{productName},</if>
+            <if test="productValue != null">product_value = #{productValue},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserPayLogById" parameterType="Long">
+        delete from user_pay_log where id = #{id}
+    </delete>
+
+    <delete id="deleteUserPayLogByIds" parameterType="String">
+        delete from user_pay_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

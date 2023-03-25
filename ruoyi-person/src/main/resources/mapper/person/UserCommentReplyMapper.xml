@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.person.mapper.UserCommentReplyMapper">
+    
+    <resultMap type="UserCommentReply" id="UserCommentReplyResult">
+        <result property="id"    column="id"    />
+        <result property="commentId"    column="comment_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="replyContent"    column="reply_content"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUserCommentReplyVo">
+        select id, comment_id, user_id, reply_content, audit_status, create_time, update_time from user_comment_reply
+    </sql>
+
+    <select id="selectUserCommentReplyList" parameterType="UserCommentReply" resultMap="UserCommentReplyResult">
+        <include refid="selectUserCommentReplyVo"/>
+        <where>  
+            <if test="commentId != null "> and comment_id = #{commentId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="replyContent != null  and replyContent != ''"> and reply_content = #{replyContent}</if>
+            <if test="auditStatus != null "> and audit_status = #{auditStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserCommentReplyById" parameterType="Long" resultMap="UserCommentReplyResult">
+        <include refid="selectUserCommentReplyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserCommentReply" parameterType="UserCommentReply">
+        insert into user_comment_reply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="commentId != null">comment_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="replyContent != null and replyContent != ''">reply_content,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="commentId != null">#{commentId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="replyContent != null and replyContent != ''">#{replyContent},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserCommentReply" parameterType="UserCommentReply">
+        update user_comment_reply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="commentId != null">comment_id = #{commentId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="replyContent != null and replyContent != ''">reply_content = #{replyContent},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserCommentReplyById" parameterType="Long">
+        delete from user_comment_reply where id = #{id}
+    </delete>
+
+    <delete id="deleteUserCommentReplyByIds" parameterType="String">
+        delete from user_comment_reply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

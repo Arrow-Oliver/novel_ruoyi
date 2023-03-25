@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('用户充值记录列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>充值用户ID：</label>
+                                <input type="text" name="userId"/>
+                            </li>
+                            <li>
+                                <label>充值方式;0-支付宝 1-微信：</label>
+                                <input type="text" name="payChannel"/>
+                            </li>
+                            <li>
+                                <label>商户订单号：</label>
+                                <input type="text" name="outTradeNo"/>
+                            </li>
+                            <li>
+                                <label>充值金额;单位：分：</label>
+                                <input type="text" name="amount"/>
+                            </li>
+                            <li>
+                                <label>充值商品ID：</label>
+                                <input type="text" name="productId"/>
+                            </li>
+                            <li>
+                                <label>充值商品名;示例值：屋币：</label>
+                                <input type="text" name="productName"/>
+                            </li>
+                            <li>
+                                <label>充值商品值;示例值：255：</label>
+                                <input type="text" name="productValue"/>
+                            </li>
+                            <li>
+                                <label>充值时间：</label>
+                                <input type="text" class="time-input" placeholder="请选择充值时间" name="payTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="person:userPayLog:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="person:userPayLog:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="person:userPayLog:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="person:userPayLog:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('person:userPayLog:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('person:userPayLog:remove')}]];
+        var prefix = ctx + "person/userPayLog";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "用户充值记录",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: '',
+                    visible: false
+                },
+                {
+                    field: 'userId',
+                    title: '充值用户ID'
+                },
+                {
+                    field: 'payChannel',
+                    title: '充值方式;0-支付宝 1-微信'
+                },
+                {
+                    field: 'outTradeNo',
+                    title: '商户订单号'
+                },
+                {
+                    field: 'amount',
+                    title: '充值金额;单位：分'
+                },
+                {
+                    field: 'productType',
+                    title: '充值商品类型;0-屋币 1-包年VIP'
+                },
+                {
+                    field: 'productId',
+                    title: '充值商品ID'
+                },
+                {
+                    field: 'productName',
+                    title: '充值商品名;示例值：屋币'
+                },
+                {
+                    field: 'productValue',
+                    title: '充值商品值;示例值：255'
+                },
+                {
+                    field: 'payTime',
+                    title: '充值时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

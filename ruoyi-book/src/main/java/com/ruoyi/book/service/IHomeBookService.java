@@ -26,7 +26,7 @@ public interface IHomeBookService
      * @param homeBook 小说推荐
      * @return 小说推荐集合
      */
-    public List<HomeBook> selectHomeBookList(HomeBook homeBook);
+    public List<HomeBookDto> selectHomeBookList(HomeBook homeBook);
 
     /**
      * 新增小说推荐

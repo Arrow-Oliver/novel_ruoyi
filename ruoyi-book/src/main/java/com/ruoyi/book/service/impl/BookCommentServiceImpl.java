@@ -1,7 +1,14 @@
 package com.ruoyi.book.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import com.ruoyi.book.domain.BookInfo;
+import com.ruoyi.book.domain.dto.BookCommentDto;
+import com.ruoyi.book.mapper.BookInfoMapper;
 import com.ruoyi.common.utils.DateUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.book.mapper.BookCommentMapper;
@@ -20,6 +27,9 @@ public class BookCommentServiceImpl implements IBookCommentService
 {
     @Autowired
     private BookCommentMapper bookCommentMapper;
+
+    @Autowired
+    private BookInfoMapper bookInfoMapper;
 
     /**
      * 查询小说评论
@@ -40,9 +50,19 @@ public class BookCommentServiceImpl implements IBookCommentService
      * @return 小说评论
      */
     @Override
-    public List<BookComment> selectBookCommentList(BookComment bookComment)
+    public List<BookCommentDto> selectBookCommentList(BookComment bookComment)
     {
-        return bookCommentMapper.selectBookCommentList(bookComment);
+        List<BookComment> bookComments = bookCommentMapper.selectBookCommentList(bookComment);
+        Map<Long, String> bookNameById = bookInfoMapper.selectBookInfoList(new BookInfo()).stream()
+            .collect(Collectors.toMap(BookInfo::getId, BookInfo::getBookName));
+        return bookComments.stream().map(v ->{
+            String bookName = bookNameById.get(v.getBookId());
+            BookCommentDto bookCommentDto = new BookCommentDto();
+            BeanUtils.copyProperties(v,bookCommentDto);
+            bookCommentDto.setBookName(bookName);
+            return bookCommentDto;
+        }).collect(Collectors.toList());
+
     }
 
     /**

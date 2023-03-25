@@ -52,7 +52,7 @@ public class HomeBookController extends BaseController
     public TableDataInfo list(HomeBook homeBook)
     {
         startPage();
-        List<HomeBook> list = homeBookService.selectHomeBookList(homeBook);
+        List<HomeBookDto> list = homeBookService.selectHomeBookList(homeBook);
         return getDataTable(list);
     }
 
@@ -65,8 +65,8 @@ public class HomeBookController extends BaseController
     @ResponseBody
     public AjaxResult export(HomeBook homeBook)
     {
-        List<HomeBook> list = homeBookService.selectHomeBookList(homeBook);
-        ExcelUtil<HomeBook> util = new ExcelUtil<HomeBook>(HomeBook.class);
+        List<HomeBookDto> list = homeBookService.selectHomeBookList(homeBook);
+        ExcelUtil<HomeBookDto> util = new ExcelUtil<>(HomeBookDto.class);
         return util.exportExcel(list, "小说推荐数据");
     }
 

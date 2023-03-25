@@ -66,10 +66,15 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
-
+        <!--书籍数据管理-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-book</artifactId>
+        </dependency>
+        <!--前台用户管理-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-person</artifactId>
         </dependency>
     </dependencies>
 

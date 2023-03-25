@@ -198,10 +198,16 @@
                 <artifactId>ruoyi-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
-
+            <!--书籍数据管理-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
                 <artifactId>ruoyi-book</artifactId>
+                <version>4.7.4</version>
+            </dependency>
+            <!--前台用户管理-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-person</artifactId>
                 <version>4.7.4</version>
             </dependency>
         </dependencies>
@@ -215,6 +221,7 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
         <module>ruoyi-book</module>
+        <module>ruoyi-person</module>
     </modules>
     <packaging>pom</packaging>
 

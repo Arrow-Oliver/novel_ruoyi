@@ -1,6 +1,8 @@
 package com.ruoyi.book.controller;
 
 import java.util.List;
+
+import com.ruoyi.book.domain.dto.BookCommentDto;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,7 +52,7 @@ public class BookCommentController extends BaseController
     public TableDataInfo list(BookComment bookComment)
     {
         startPage();
-        List<BookComment> list = bookCommentService.selectBookCommentList(bookComment);
+        List<BookCommentDto> list = bookCommentService.selectBookCommentList(bookComment);
         return getDataTable(list);
     }
 
@@ -63,8 +65,8 @@ public class BookCommentController extends BaseController
     @ResponseBody
     public AjaxResult export(BookComment bookComment)
     {
-        List<BookComment> list = bookCommentService.selectBookCommentList(bookComment);
-        ExcelUtil<BookComment> util = new ExcelUtil<BookComment>(BookComment.class);
+        List<BookCommentDto> list = bookCommentService.selectBookCommentList(bookComment);
+        ExcelUtil<BookCommentDto> util = new ExcelUtil<BookCommentDto>(BookCommentDto.class);
         return util.exportExcel(list, "小说评论数据");
     }
 

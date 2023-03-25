@@ -2,6 +2,7 @@ package com.ruoyi.book.service;
 
 import java.util.List;
 import com.ruoyi.book.domain.BookComment;
+import com.ruoyi.book.domain.dto.BookCommentDto;
 
 /**
  * 小说评论Service接口
@@ -25,7 +26,7 @@ public interface IBookCommentService
      * @param bookComment 小说评论
      * @return 小说评论集合
      */
-    public List<BookComment> selectBookCommentList(BookComment bookComment);
+    public List<BookCommentDto> selectBookCommentList(BookComment bookComment);
 
     /**
      * 新增小说评论
