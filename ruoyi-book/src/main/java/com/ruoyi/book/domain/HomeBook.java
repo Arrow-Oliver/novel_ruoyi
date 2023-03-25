@@ -1,5 +1,7 @@
 package com.ruoyi.book.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -16,6 +18,7 @@ public class HomeBook extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /**  */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /** 推荐类型;0-轮播图 1-顶部栏 2-本周强推 3-热门推荐 4-精品推荐 */
@@ -28,14 +31,15 @@ public class HomeBook extends BaseEntity
 
     /** 推荐小说ID */
     @Excel(name = "推荐小说ID")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long bookId;
 
-    public void setId(Long id) 
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
@@ -57,12 +61,12 @@ public class HomeBook extends BaseEntity
     {
         return sort;
     }
-    public void setBookId(Long bookId) 
+    public void setBookId(Long bookId)
     {
         this.bookId = bookId;
     }
 
-    public Long getBookId() 
+    public Long getBookId()
     {
         return bookId;
     }

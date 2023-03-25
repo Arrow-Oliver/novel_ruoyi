@@ -2,6 +2,7 @@ package com.ruoyi.book.service;
 
 import java.util.List;
 import com.ruoyi.book.domain.HomeBook;
+import com.ruoyi.book.domain.dto.HomeBookDto;
 
 /**
  * 小说推荐Service接口

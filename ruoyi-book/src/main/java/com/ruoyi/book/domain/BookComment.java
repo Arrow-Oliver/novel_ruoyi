@@ -1,5 +1,7 @@
 package com.ruoyi.book.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -16,14 +18,17 @@ public class BookComment extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /** 评论小说ID */
     @Excel(name = "评论小说ID")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long bookId;
 
     /** 评论用户ID */
     @Excel(name = "评论用户ID")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
 
     /** 评价内容 */

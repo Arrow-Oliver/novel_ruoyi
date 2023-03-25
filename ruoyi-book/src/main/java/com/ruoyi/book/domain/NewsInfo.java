@@ -1,5 +1,7 @@
 package com.ruoyi.book.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -16,10 +18,12 @@ public class NewsInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /** 类别ID */
     @Excel(name = "类别ID")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long categoryId;
 
     /** 类别名 */
